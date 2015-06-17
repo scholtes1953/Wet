@@ -18,22 +18,6 @@ import com.mjs.wet.Wet.Pair;
 
 public class WetTest {
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-	}
-
-	@AfterClass
-	public static void tearDownAfterClass() throws Exception {
-	}
-
-	@Before
-	public void setUp() throws Exception {
-	}
-
-	@After
-	public void tearDown() throws Exception {
-	}
-
 	@Test
 	public void testCSAListParsing() {
 		// those fields we wish to extract
@@ -68,7 +52,7 @@ public class WetTest {
 		}
 
 		// get MSA, county, state
-		fields = line.split(Wet.embeddedCommaRegex(),-1);
+		fields = line.split(Utilities.embeddedCommaRegex(),-1);
 		String MSA = fields[indexes[MSA_PROPERTY]].trim().replaceAll("^\"|\"$", "");
 		boolean isMetro = (fields[indexes[METRO_MICRO_PROPERTY]].equals(MSA_STRING));
 		String county = fields[indexes[COUNTY_PROPERTY]];
@@ -119,13 +103,13 @@ public class WetTest {
 	
 	@Test
 	public void testNormalizeCounty() {
-		assertEquals("TRAVIS", Wet.normalizeCounty("Travis County"));
-		assertEquals("TRAVIS", Wet.normalizeCounty("\"TRAVIS\""));
+		assertEquals("TRAVIS", Data.normalizeCounty("Travis County"));
+		assertEquals("TRAVIS", Data.normalizeCounty("\"TRAVIS\""));
 	}
 	
 	@Test
 	public void testNormalizeState() {
-		assertEquals("TX", Wet.normalizeState("Texas"));
-		assertEquals("TX", Wet.normalizeState("\"TX\""));
+		assertEquals("TX", Data.normalizeState("Texas"));
+		assertEquals("TX", Data.normalizeState("\"TX\""));
 	}
 }
