@@ -10,16 +10,18 @@ import java.util.StringJoiner;
 public class Utilities {
 
 	/**
-	 * Exports a Map<String,Double> to a csv file
-	 * @param msaPeopleInches
+	 * Export a Map of String to Double to a csv file
+	 * @param map Map to export
+	 * @param fileName file to export to
+	 * @param header header row of exported file
 	 */
-	public static void exportMap(Map<String, Double> msaPeopleInches) {
+	public static void exportMap(Map<String, Double> map, String fileName, String header) {
 		BufferedWriter writer = null;
 		try {
-			writer = new BufferedWriter(new FileWriter("peopleinches.csv"));
-			writer.write("MSA,PeopleInches");
+			writer = new BufferedWriter(new FileWriter(fileName));
+			writer.write(header);
 			writer.newLine();
-			for(Entry<String,Double> entry: msaPeopleInches.entrySet()) {
+			for(Entry<String,Double> entry: map.entrySet()) {
 				StringBuilder sj = new StringBuilder();
 				sj.append("\"").append(entry.getKey()).append("\"").append(",");
 				sj.append(String.format("%5.2E", entry.getValue()));
@@ -41,7 +43,12 @@ public class Utilities {
 		}
 	}
 	
-	// Travis + TX -> Travis|TX
+	/**
+	 * Create a String key from county name and state: Travis + TX becomes Travis|TX
+	 * @param county County name
+	 * @param state State name
+	 * @return single String
+	 */
 	static public String createCountyStateKey(String county, String state) {
 		return county + "|" + state;
 	}

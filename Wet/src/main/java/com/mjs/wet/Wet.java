@@ -44,7 +44,7 @@ public class Wet {
 		
 		Map<String, Double> msaPeopleInches = wet.getPersonWetness();
 		
-		Utilities.exportMap(msaPeopleInches);	
+		Utilities.exportMap(msaPeopleInches, "peopleinches.csv", "MSA,PeopleInches");	
 
 		//TODO: graph it; Swing, JavaFX, JFreeChart, D3.js
 	}
