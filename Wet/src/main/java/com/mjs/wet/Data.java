@@ -72,6 +72,15 @@ public class Data {
 					}
 				}while(wbanPrecip != null && wbanPrecip.getElement0().equals(oldWban));
 				// at this point, totalRain is the sum for oldWban
+				
+				// TODO: there is a complication, due to the possibility that an MSA can contain multiple
+				// counties, each with its own WBAN. 
+				// We would ideally come up with an MSA rainfall value based on the combination
+				// of the values from each county, weighted by county population. We don't have county
+				// population. Should we take the average? The max?
+				// The current implementation simply takes the last county we encounter in the MSA as
+				// representative, and uses its rainfall value for the whole MSA.
+				
 				Pair<String, String> countyState = getNormalizedCountyState(wbanCounties, oldWban);
 				if (countyState != null) {
 					String MSA = getMSAForCounty(countyState, counties);
