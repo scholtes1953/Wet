@@ -106,24 +106,34 @@ public class Wet {
 		Map<String, Pair<String,String>> wbanCounties = Data.loadWBANCountyMap(wbanReader);
 		
 		// total daytime rain per MSA
-		Map<String, Double> msaRain = Data.mergeRainWithCounties(msaCounties, precipReader, wbanCounties);
+		Map<String, List<Double>> msaRain = Data.mergeRainWithCounties(msaCounties, precipReader, wbanCounties);
 		
 		return multiplyRainTimesPeople(msaRain, popReader);
 	}
 
 
 	private Map<String, Double> multiplyRainTimesPeople(
-			Map<String, Double> msaRain, BufferedReader popReader) 
+			Map<String, List<Double>> msaRain, BufferedReader popReader) 
 	{
 		HashMap<String, Double> msaPeopleInches = new HashMap<String, Double>();
 
 		LocalDate extrapolationDate = LocalDate.of(2015, Month.MAY, 15);
 		Map<String, Integer> msaPeople = Data.getExtrapolatedPopulations(popReader, extrapolationDate);
 
-		for(Map.Entry<String, Double> entry : msaRain.entrySet()) {
+		for(Map.Entry<String, List<Double>> entry : msaRain.entrySet()) {
 			String msa = entry.getKey();
-			Double rain = entry.getValue();
+			List<Double> rainValues = entry.getValue();
+			double rain = 0.0d;
+			int count = 0;
+			for(Double d : rainValues){
+			    count++;
+			    rain += d;
+			}
+			if (count > 0) rain /= count;
+			System.out.println("msa="+msa+"rain ="+rainValues.toString());
+			
 			int people = msaPeople.get(msa);
+			
 			msaPeopleInches.put(msa, rain * people);
 		}
 		// sort descending by wetness

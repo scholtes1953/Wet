@@ -28,9 +28,9 @@ public class Data {
 	 * @param counties HashMap of MSA to List of counties
 	 * @param precipReader BufferedReader for WBAN precip. data
 	 * @param wbanCounties Map of WBAN to county
-	 * @return Map of MSA name to inches of rain
+	 * @return Map of MSA name to list of inches of rain for each WBAN in MSA
 	 */
-	static public Map<String, Double> mergeRainWithCounties(
+	static public Map<String, List<Double>> mergeRainWithCounties(
 			Map<String, String> counties, 
 			BufferedReader precipReader,
 			Map<String, Pair<String,String>> wbanCounties)
@@ -43,7 +43,7 @@ public class Data {
 		// 		look up the county and state for this wban
 		//  	get MSA for county,state
 		//  	save rain for msa
-		Map<String, Double> msaRain = new HashMap<String, Double>();
+		Map<String, List<Double>> msaRain = new HashMap<String, List<Double>>();
 		
 		boolean reachedEOF = false;
 		/*
@@ -85,7 +85,11 @@ public class Data {
 				if (countyState != null) {
 					String MSA = getMSAForCounty(countyState, counties);
 					if (MSA != null) {
-						msaRain.put(MSA,  totalRain);
+					    if (!msaRain.containsKey(MSA)){
+					        msaRain.put(MSA,  new ArrayList<Double>());
+					    }
+					    List<Double> stationRains = msaRain.get(MSA);
+						stationRains.add(totalRain);
 					}
 				}
 			}
